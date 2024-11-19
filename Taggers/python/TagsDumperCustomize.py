@@ -17,6 +17,8 @@ def customizeTagsDumper(process, customize):
     process.tagsDumper.nameTemplate = cms.untracked.string("$PROCESS_$SQRTS_$CLASSNAME_$SUBCAT_$LABEL")
     process.tagsDumper.splitPdfByStage0Bin = cms.untracked.bool(customize.doHTXS)
     process.tagsDumper.splitPdfByStage1Bin = cms.untracked.bool(customize.doStageOne)
+    process.tagsDumper.isInt = customize.isInt
+    process.tagsDumper.doPCA = customize.doPCA
     
     if customize.options.WeightName:
         lheProduct = customize.dataset[1]["LHESourceName"].split("_")

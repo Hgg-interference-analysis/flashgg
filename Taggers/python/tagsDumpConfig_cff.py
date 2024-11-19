@@ -20,6 +20,9 @@ tagsDumpConfig = cms.PSet(
     dumpHistos = cms.untracked.bool(False),
     dumpWorkspace = cms.untracked.bool(False),
     dumpTrees = cms.untracked.bool(False),
+
+    isInt = cms.untracked.bool(False),
+    doPCA = cms.untracked.bool(False),
     
     quietRooFit = cms.untracked.bool(False),
     dumpGlobalVariables = cms.untracked.bool(True),

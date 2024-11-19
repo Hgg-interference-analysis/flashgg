@@ -204,6 +204,12 @@ customize.options.register('isInt',
                            VarParsing.VarParsing.varType.bool,
                            'isInt'
                            )
+customize.options.register('doPCA',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'doPCA'
+                           )
 
 
 print "Printing defaults"
@@ -538,12 +544,18 @@ diphoton_variables = ["mass          := diPhoton.mass",
 definedSysts=set()
 process.tagsDumper.classifierCfg.remap=cms.untracked.VPSet()
 import flashgg.Taggers.dumperConfigTools as cfgTools
-for tag in tagList: 
+for tag in tagList:
   tagName=tag[0]
   tagCats=tag[1]
   # remap return value of class-based classifier
   process.tagsDumper.classifierCfg.remap.append( cms.untracked.PSet( src=cms.untracked.string("flashgg%s"%tagName), dst=cms.untracked.string(tagName) ) )
+
+  print("systlabels: ", systlabels)
+
   for systlabel in systlabels:
+      
+      print("systlabel: ", systlabel)
+
       if not systlabel in definedSysts:
           # the cut corresponding to the systematics can be defined just once
           cutstring = "hasSyst(\"%s\") "%(systlabel)
@@ -567,9 +579,18 @@ for tag in tagList:
       isBinnedOnly = (systlabel !=  "")
       is_signal = reduce(lambda y,z: y or z, map(lambda x: customize.processId.count(x), signal_processes))
       if ( customize.doPdfWeights and customize.doSystematics ) and ( (customize.datasetName() and customize.datasetName().count("HToGG")) or customize.processId.count("h_") or customize.processId.count("vbf_") or is_signal ) and (systlabel ==  "") and not (customize.processId.count("bbh_") or customize.processId.count("thw_") or customize.processId.count("thq_")):
+          print("DUMPING PDF WEIGHTS")
           #print "Signal MC central value, so dumping PDF weights"
           dumpPdfWeights = True
-          nPdfWeights = 5
+
+          nPdfWeights = -1
+
+          if customize.doPCA:
+              nPdfWeights = 5
+          else:
+              if customize.isInt: nPdfWeights = 100
+              else: nPdfWeights = 60
+
           if customize.processId.count("vh") or customize.isInt:
               nAlphaSWeights = 1
               nScaleWeights = 1

@@ -30,3 +30,8 @@ AutoDict_*
 DataFormats/src/classes_def.xml
 
 MicroAOD/data/*
+
+log_*
+
+MetaData/work/Era*
+MetaData/work/HGG*

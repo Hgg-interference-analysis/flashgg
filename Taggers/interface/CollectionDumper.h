@@ -124,6 +124,7 @@ namespace flashgg {
 
         std::string processId_;
         bool isInt_;
+        bool doPCA_;
         int processIndex_;
         double lumiWeight_;
         bool splitLumiWeight_;
@@ -247,6 +248,7 @@ namespace flashgg {
 
         processId_           = cfg.getParameter<std::string>( "processId" );
         isInt_               = cfg.getUntrackedParameter<bool>( "isInt" , false);
+        doPCA_               = cfg.getUntrackedParameter<bool>( "doPCA" , false);
         processIndex_        = cfg.exists("processIndex") ? cfg.getParameter<int>("processIndex") : 999;
         lumiWeight_          = cfg.getParameter<double>( "lumiWeight" );
         splitLumiWeight_     = cfg.getUntrackedParameter<bool>( "splitLumiWeight", false );
@@ -311,11 +313,6 @@ namespace flashgg {
             }
             if (nScaleWeights_ == 0) {
                 nScaleWeights_ = cat.exists("nScaleWeights") ? cat.getParameter<int>( "nScaleWeights" ) : 0;
-            }
-
-            if ( ((processId_.find(std::string("ggh")) != std::string::npos ) && (isInt_)) || (processId_.find(std::string("vh")) != std::string::npos )   ){
-                nAlphaSWeights_ = 1;
-                nScaleWeights_ = 1;
             }
 
             if (dumpPdfWeights_ == false ) {
@@ -408,6 +405,11 @@ namespace flashgg {
     template<class C, class T, class U>
     void CollectionDumper<C, T, U>::beginJob()
     {
+
+        if (!doPCA_){
+            cout << "----------- PCA NOT ACTIVE -----------------" << endl;
+            return;
+        }
 
         std::ifstream dataFile;
 
@@ -652,18 +654,24 @@ namespace flashgg {
                 std::vector<float> uncompressed_alpha_s = (*WeightHandle)[weight_index].uncompress( compressed_alpha_s_weights );
                 std::vector<float> uncompressed_scale = (*WeightHandle)[weight_index].uncompress( compressed_scale_weights );
 
-
-                Eigen::VectorXd pdfweights_vector(60);
-                for( unsigned int j=0; j<uncompressed.size();j++ ) {
-                    pdfweights_vector(j) = (double)uncompressed[j];
+                if (doPCA_){
+                    Eigen::VectorXd pdfweights_vector(60);
+                    for( unsigned int j=0; j<uncompressed.size();j++ ) {
+                        pdfweights_vector(j) = (double)uncompressed[j];
+                    }
+                    
+                    Eigen::VectorXd pdfweights_vector_transformed(nPdfWeights_);
+                    
+                    pdfweights_vector_transformed = pca_matrix_ * pdfweights_vector;
+                    
+                    for( int j=0; j<int(nPdfWeights_); j++ ) {
+                        pdfWeights.push_back(pdfweights_vector_transformed(j));
+                    }
                 }
-
-                Eigen::VectorXd pdfweights_vector_transformed(nPdfWeights_);
-
-                pdfweights_vector_transformed = pca_matrix_ * pdfweights_vector;
-
-                for( int j=0; j<int(nPdfWeights_); j++ ) {
-                    pdfWeights.push_back(pdfweights_vector_transformed(j));
+                else {
+                    for( int j=0; j<int(nPdfWeights_); j++ ) {
+                        pdfWeights.push_back(uncompressed[j]);
+                    }
                 }
 
                 for( int j=0; j<int(nAlphaSWeights_); j++ ) {
@@ -685,16 +693,24 @@ namespace flashgg {
             vector<double> genweights = eventGenWeight(event);
             vector<double> pdfweights(genweights.end() - std::min<int>(genweights.size(), 100), genweights.end());
 
-            Eigen::VectorXd pdfweights_vector(100);
-            for( unsigned int j=0; j<pdfweights.size();j++ ) {
-                pdfweights_vector(j) = (double)pdfweights[j];
+            if (doPCA_){
+                Eigen::VectorXd pdfweights_vector(100);
+                for( unsigned int j=0; j<pdfweights.size();j++ ) {
+                    pdfweights_vector(j) = (double)pdfweights[j];
+                }
+                
+                Eigen::VectorXd pdfweights_vector_transformed(5);
+                pdfweights_vector_transformed = pca_matrix_ * pdfweights_vector;
+                
+                for( int j=0; j<int(nPdfWeights_); j++ ) {
+                    pdfWeights.push_back(pdfweights_vector_transformed(j));
+                }
             }
 
-            Eigen::VectorXd pdfweights_vector_transformed(5);
-            pdfweights_vector_transformed = pca_matrix_ * pdfweights_vector;
-
-            for( int j=0; j<int(nPdfWeights_); j++ ) {
-                pdfWeights.push_back(pdfweights_vector_transformed(j));
+            else{
+                for( int j=0; j<int(nPdfWeights_); j++ ) {
+                    pdfWeights.push_back(pdfweights[j]);
+                }
             }
 
             for( int j=0; j<int(nAlphaSWeights_); j++ ) {
