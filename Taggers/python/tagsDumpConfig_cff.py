@@ -21,6 +21,7 @@ tagsDumpConfig = cms.PSet(
     dumpWorkspace = cms.untracked.bool(False),
     dumpTrees = cms.untracked.bool(False),
 
+    fromSHERPA = cms.untracked.bool(False),
     isInt = cms.untracked.bool(False),
     doPCA = cms.untracked.bool(False),
     

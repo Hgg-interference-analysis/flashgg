@@ -789,7 +789,8 @@ class SamplesManager(object):
             for ifile in aboveThr:
                 entries = 0
                 for idset,dset in enumerate(self.src_[ifile]):
-                    entries += entriesPerDataset.get(dset)
+                    if entriesPerDataset.get(dset) is not None:
+                        entries += entriesPerDataset.get(dset)
                     if entries > self.max_entries_per_file_:
                         break
                 move = self.src_[ifile][idset:]
@@ -799,8 +800,10 @@ class SamplesManager(object):
                 
                 for dset in move:
                     entries = entriesPerDataset.get(dset)
+                    if entries is None: entries = 0
                     moved = False
                     for ifile in belowThr:
+                        if entriesPerFile[ifile] is None: continue
                         if entriesPerFile[ifile] + entries < self.max_entries_per_file_:
                             entriesPerFile[ifile] += entries
                             self.src_[ ifile  ].append(dset)

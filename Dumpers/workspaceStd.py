@@ -198,17 +198,23 @@ customize.options.register('applyNNLOPSweight',
                            VarParsing.VarParsing.varType.bool,
                            'applyNNLOPSweight'
                            )
-customize.options.register('isInt',
-                           False,
-                           VarParsing.VarParsing.multiplicity.singleton,
-                           VarParsing.VarParsing.varType.bool,
-                           'isInt'
-                           )
 customize.options.register('doPCA',
                            False,
                            VarParsing.VarParsing.multiplicity.singleton,
                            VarParsing.VarParsing.varType.bool,
                            'doPCA'
+                           )
+customize.options.register('fromSHERPA',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'fromSHERPA'
+                           )
+customize.options.register('isInt',
+                           False,
+                           VarParsing.VarParsing.multiplicity.singleton,
+                           VarParsing.VarParsing.varType.bool,
+                           'isInt'
                            )
 
 
@@ -427,7 +433,7 @@ cloneTagSequenceForEachSystematic(process,systlabels,phosystlabels,metsystlabels
 # Dump an object called NoTag for untagged events in order to track QCD weights
 # Will be broken if it's done for non-central values, so turn this on only for the non-syst tag sorter
 process.flashggTagSorter.CreateNoTag = True # MUST be after tag sequence cloning
-if not customize.isInt:
+if not customize.fromSHERPA:
     process.flashggTagSorter.isGluonFusion = cms.bool(bool(customize.processId.count("ggh") or customize.processId.lower().count("glugluh")))
 process.flashggTagSorter.applyNNLOPSweight = cms.bool(customize.applyNNLOPSweight)
 
@@ -586,17 +592,13 @@ for tag in tagList:
           nPdfWeights = -1
 
           if customize.doPCA:
-              nPdfWeights = 5
+              nPdfWeights = 1
           else:
-              if customize.isInt: nPdfWeights = 100
+              if customize.fromSHERPA: nPdfWeights = 100
               else: nPdfWeights = 60
 
-          if customize.processId.count("vh") or customize.isInt:
-              nAlphaSWeights = 1
-              nScaleWeights = 1
-          elif (customize.processId.count("ggh") or customize.processId.count("vbf")) and (not customize.isInt):
-              nAlphaSWeights = 2
-              nScaleWeights = 9
+          nAlphaSWeights = 2
+          nScaleWeights = 9
 
       else:
           #print "Data, background MC, or non-central value, or no systematics: no PDF weights"

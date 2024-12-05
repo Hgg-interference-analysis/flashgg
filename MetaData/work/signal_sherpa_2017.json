@@ -1,0 +1,9 @@
+{
+    "data" : [],
+    "sig"  : [
+	"/GluGluHToGG_M120_13TeV-sherpa/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM",
+	"/GluGluHToGG_M125_13TeV-sherpa/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM",
+	"/GluGluHToGG_M130_13TeV-sherpa/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM"
+    ],
+    "bkg" : []
+}

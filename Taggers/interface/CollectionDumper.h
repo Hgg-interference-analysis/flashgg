@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <numeric>
 
 #include <Eigen/Dense>
 #include <fstream>
@@ -114,6 +115,7 @@ namespace flashgg {
         edm::InputTag src_, genInfo_, pdfWeight_ , lheEvent_;
 
         Eigen::MatrixXd pca_matrix_;
+        Eigen::VectorXd pca_offset_;
 
         edm::EDGetTokenT<collection_type> srcToken_;
         edm::EDGetTokenT<GenEventInfoProduct> genInfoToken_;
@@ -123,6 +125,7 @@ namespace flashgg {
         int LHEWeightIndex;
 
         std::string processId_;
+        bool fromSHERPA_;
         bool isInt_;
         bool doPCA_;
         int processIndex_;
@@ -247,6 +250,7 @@ namespace flashgg {
         LHEWeightIndex = -1;
 
         processId_           = cfg.getParameter<std::string>( "processId" );
+        fromSHERPA_          = cfg.getUntrackedParameter<bool>( "fromSHERPA" , false);
         isInt_               = cfg.getUntrackedParameter<bool>( "isInt" , false);
         doPCA_               = cfg.getUntrackedParameter<bool>( "doPCA" , false);
         processIndex_        = cfg.exists("processIndex") ? cfg.getParameter<int>("processIndex") : 999;
@@ -406,29 +410,50 @@ namespace flashgg {
     void CollectionDumper<C, T, U>::beginJob()
     {
 
-        if (!doPCA_){
+        if ( (!doPCA_) || (!dumpPdfWeights_) ){
             cout << "----------- PCA NOT ACTIVE -----------------" << endl;
             return;
         }
 
-        std::ifstream dataFile;
+        std::ifstream matrixFile, offsetFile;
 
-        std::string ggh("ggh");
+        std::string ggh("ggh"), vbf("vbf");
 
-        if ( (processId_.find(ggh) != std::string::npos) && (!isInt_ )) {
-            pca_matrix_.resize(5, 60);
-            dataFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/ggh_pcamatrix.dat");
+        if ( (processId_.find(ggh) != std::string::npos) && (!fromSHERPA_ )) {
+            pca_matrix_.resize(nPdfWeights_, 60);
+            pca_offset_.resize(60);
+            matrixFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/ggh_pcamatrix.dat");
+            offsetFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/ggh_offset.dat");
         }
 
-        if ( (processId_.find(ggh) != std::string::npos) && (isInt_ )) {
-            pca_matrix_.resize(5, 100);
-            dataFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/int_pcamatrix.dat");
+        if ( (processId_.find(ggh) != std::string::npos) && (fromSHERPA_ ) && (isInt_)) {
+            pca_matrix_.resize(nPdfWeights_, 100);
+            pca_offset_.resize(100);
+            matrixFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/int_pcamatrix.dat");
+            offsetFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/int_offset.dat");
+        }
+
+        if ( (processId_.find(ggh) != std::string::npos) && (fromSHERPA_ ) && (!isInt_)) {
+            pca_matrix_.resize(nPdfWeights_, 100);
+            pca_offset_.resize(100);
+            matrixFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/ggh_sherpa_pcamatrix.dat");
+            offsetFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/ggh_sherpa_offset.dat");
+        }
+
+        if ( (processId_.find(vbf) != std::string::npos) && (!fromSHERPA_ )) {
+            pca_matrix_.resize(nPdfWeights_, 60);
+            pca_offset_.resize(60);
+            matrixFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/vbf_pcamatrix.dat");
+            offsetFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/vbf_offset.dat");
         }
 
 
         for(int row = 0; row < pca_matrix_.rows(); ++row)
             for(int col = 0; col < pca_matrix_.cols(); ++col)
-                dataFile >> pca_matrix_(row, col);
+                matrixFile >> pca_matrix_(row, col);
+
+        for(int row = 0; row < pca_offset_.rows(); ++row)
+                offsetFile >> pca_offset_(row);
 
         for(int row = 0; row < pca_matrix_.rows(); ++row){
             cout << "MATRICE ";
@@ -437,6 +462,12 @@ namespace flashgg {
             }
             cout << endl;
         }
+
+        for(int row = 0; row < pca_offset_.rows(); ++row){
+            cout << "OFFSET ";
+            cout << pca_offset_(row) << " ";
+        }
+        cout << endl;
         
     }
 
@@ -635,16 +666,15 @@ namespace flashgg {
 
         std::string ggh("ggh"), vbf("vbf"), vh("vh");
 
-        if ( ( (processId_.find(ggh) != std::string::npos) || (processId_.find(vbf) != std::string::npos) ) && (!isInt_) ){
+        if ( ( (processId_.find(ggh) != std::string::npos) || (processId_.find(vbf) != std::string::npos) ) && (!fromSHERPA_) ){
             const edm::Event * fullEvent = dynamic_cast<const edm::Event *>(&event);
             if (fullEvent != 0) {
                 fullEvent->getByToken(pdfWeightToken_, WeightHandle);
             } else {
                 event.getByLabel(pdfWeight_, WeightHandle);
             }
-        
+
             for( unsigned int weight_index = 0; weight_index < (*WeightHandle).size(); weight_index++ ){
-                
 
                 vector<uint16_t> compressed_weights = (*WeightHandle)[weight_index].pdf_weight_container; 
                 vector<uint16_t> compressed_alpha_s_weights = (*WeightHandle)[weight_index].alpha_s_container; 
@@ -659,13 +689,17 @@ namespace flashgg {
                     for( unsigned int j=0; j<uncompressed.size();j++ ) {
                         pdfweights_vector(j) = (double)uncompressed[j];
                     }
-                    
+
+                    double avg = pdfweights_vector.sum() / 60;
+
+                    for (int j=0; j<60; j++) pdfweights_vector(j) = pdfweights_vector(j)/avg - 1 - pca_offset_(j);
+
                     Eigen::VectorXd pdfweights_vector_transformed(nPdfWeights_);
-                    
+
                     pdfweights_vector_transformed = pca_matrix_ * pdfweights_vector;
-                    
+
                     for( int j=0; j<int(nPdfWeights_); j++ ) {
-                        pdfWeights.push_back(pdfweights_vector_transformed(j));
+                        pdfWeights.push_back( (pdfweights_vector_transformed(j)+1)*avg );
                     }
                 }
                 else {
@@ -674,36 +708,38 @@ namespace flashgg {
                     }
                 }
 
+             
                 for( int j=0; j<int(nAlphaSWeights_); j++ ) {
                     pdfWeights.push_back(uncompressed_alpha_s[j]);
                 }
-                if ( (*WeightHandle)[weight_index].qcd_scale_container.size() == 0 ) {
-                    for ( int j=0; j<int(nScaleWeights_); j++ ) {
-                        pdfWeights.push_back(1.); // should never be used in case this workaround is in place
-                    }
-                } else {
-                    for( int j=0; j<int(nScaleWeights_); j++ ) {
-                        pdfWeights.push_back(uncompressed_scale[j]);
-                    }
+
+                for( int j=0; j<int(nScaleWeights_); j++ ) {
+                    pdfWeights.push_back(uncompressed_scale[j] );
                 }
+                
             }
         }
 
-        if ( (processId_.find(ggh) != std::string::npos ) && (isInt_) ){
+        if ( (processId_.find(ggh) != std::string::npos ) && (fromSHERPA_) ){
             vector<double> genweights = eventGenWeight(event);
             vector<double> pdfweights(genweights.end() - std::min<int>(genweights.size(), 100), genweights.end());
 
             if (doPCA_){
                 Eigen::VectorXd pdfweights_vector(100);
-                for( unsigned int j=0; j<pdfweights.size();j++ ) {
+                for( unsigned int j=0; j<100; j++ ) {
                     pdfweights_vector(j) = (double)pdfweights[j];
                 }
-                
-                Eigen::VectorXd pdfweights_vector_transformed(5);
+
+                double avg = pdfweights_vector.sum() / pdfweights.size();
+
+                for (int j=0; j<100; j++) pdfweights_vector(j) = pdfweights_vector(j)/avg - 1 - pca_offset_(j);
+
+                Eigen::VectorXd pdfweights_vector_transformed(nPdfWeights_);
+
                 pdfweights_vector_transformed = pca_matrix_ * pdfweights_vector;
-                
+
                 for( int j=0; j<int(nPdfWeights_); j++ ) {
-                    pdfWeights.push_back(pdfweights_vector_transformed(j));
+                    pdfWeights.push_back( (pdfweights_vector_transformed(j)+1)*avg );
                 }
             }
 
@@ -714,24 +750,39 @@ namespace flashgg {
             }
 
             for( int j=0; j<int(nAlphaSWeights_); j++ ) {
-                pdfWeights.push_back(1.);
+                pdfWeights.push_back(genweights[5]);
             }
+
+            double scaleWeights[9];
+
+            scaleWeights[0] = genweights[5]; //muf1 mur1
+            scaleWeights[1] = genweights[7]; //muf1 mur2
+            scaleWeights[2] = genweights[9]; //muf1 mur0.5
+            scaleWeights[3] = genweights[8]; //muf2 mur 1
+            scaleWeights[4] = genweights[4]; //muf2 mur2
+            scaleWeights[5] = genweights[5]; //muf2 mur0.5 - not present in sherpa
+            scaleWeights[6] = genweights[10]; //muf0.5 mur1
+            scaleWeights[7] = genweights[5]; //muf0.5 mur2 - not present in sherpa
+            scaleWeights[8] = genweights[6]; //muf0.5 mur0.5
+
             for ( int j=0; j<int(nScaleWeights_); j++ ) {
-                pdfWeights.push_back(1.); // should never be used in case this workaround is in place                                                                          
+                pdfWeights.push_back(scaleWeights[j]);
             }
         }
 
         if ( (processId_.find(std::string("vh")) != std::string::npos ) ){
 
+            double genWeight = eventGenWeight(event)[0];
+
             for( int j=0; j<int(nPdfWeights_); j++ ) {
-                pdfWeights.push_back(1.);
+                pdfWeights.push_back(genWeight);
             }
 
             for( int j=0; j<int(nAlphaSWeights_); j++ ) {
-                pdfWeights.push_back(0.);
+                pdfWeights.push_back(genWeight);
             }
             for ( int j=0; j<int(nScaleWeights_); j++ ) {
-                pdfWeights.push_back(0.); // should never be used in case this workaround is in place                                                                                  
+                pdfWeights.push_back(genWeight); 
             }
         }
 
@@ -757,15 +808,18 @@ namespace flashgg {
         weight_ = eventWeight( event );
         genweight_ = eventGenWeight( event );
         if( dumpPdfWeights_){
-            
             // want pdfWeights_ to be scale factors rather than akternative weights.
             // To do this, each PDF weight needs to be divided by the nominal MC weight
             // which is obtained by dividing through weight_ by the lumiweight...
             // The Scale Factor is then pdfWeight/nominalMC weight
+
             pdfWeights_ = pdfWeights( event );
-            for (unsigned int i = 0; i < pdfWeights_.size() ; i++){
-                pdfWeights_[i]= (pdfWeights_[i] )*(lumiWeight_/weight_); // ie pdfWeight/nominal MC weight
-            }   
+            if ( !(processId_.find(std::string("vh")) != std::string::npos ) ){
+
+                for (unsigned int i = 0; i < pdfWeights_.size() ; i++){
+                     pdfWeights_[i] = (pdfWeights_[i] )*(lumiWeight_/weight_); // ie pdfWeight/nominal MC weight
+                }
+            }
         }
            
         int nfilled = maxCandPerEvent_;
