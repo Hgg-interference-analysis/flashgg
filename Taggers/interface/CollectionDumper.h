@@ -422,29 +422,29 @@ namespace flashgg {
         if ( (processId_.find(ggh) != std::string::npos) && (!fromSHERPA_ )) {
             pca_matrix_.resize(nPdfWeights_, 60);
             pca_offset_.resize(60);
-            matrixFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/ggh_pcamatrix.dat");
-            offsetFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/ggh_offset.dat");
+            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/InterferenceWidth/PcaMatrices/ggh_pcamatrix.dat");
+            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/ggh_offset.dat");
         }
 
         if ( (processId_.find(ggh) != std::string::npos) && (fromSHERPA_ ) && (isInt_)) {
             pca_matrix_.resize(nPdfWeights_, 100);
             pca_offset_.resize(100);
-            matrixFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/int_pcamatrix.dat");
-            offsetFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/int_offset.dat");
+            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/int_pcamatrix.dat");
+            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/int_offset.dat");
         }
 
         if ( (processId_.find(ggh) != std::string::npos) && (fromSHERPA_ ) && (!isInt_)) {
             pca_matrix_.resize(nPdfWeights_, 100);
             pca_offset_.resize(100);
-            matrixFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/ggh_sherpa_pcamatrix.dat");
-            offsetFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/ggh_sherpa_offset.dat");
+            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/ggh_sherpa_pcamatrix.dat");
+            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/ggh_sherpa_offset.dat");
         }
 
         if ( (processId_.find(vbf) != std::string::npos) && (!fromSHERPA_ )) {
             pca_matrix_.resize(nPdfWeights_, 60);
             pca_offset_.resize(60);
-            matrixFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/vbf_pcamatrix.dat");
-            offsetFile = std::ifstream("/afs/cern.ch/work/r/rgargiul/CMSSW_10_6_29/src/flashgg/MetaData/data/PcaMatrices/vbf_offset.dat");
+            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/vbf_pcamatrix.dat");
+            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/vbf_offset.dat");
         }
 
 
