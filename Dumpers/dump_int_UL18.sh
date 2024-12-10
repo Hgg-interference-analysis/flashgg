@@ -13,3 +13,4 @@ fggRunJobs.py  \
     --no-copy-proxy -D -P \
     --no-use-tarball \
     -x cmsRun $dumper maxEvents=$nEvents copyInputMicroAOD=False
+    --cont --resubmit-missing
