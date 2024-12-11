@@ -70,7 +70,8 @@ flashggPreselectedDiPhotons = cms.EDFilter(
         " && (subLeadingPhoton.full5x5_r9>0.8||subLeadingPhoton.egChargedHadronIso<20||subLeadingPhoton.egChargedHadronIso/subLeadingPhoton.pt<0.3)"
         " && (leadingPhoton.hadronicOverEm < 0.08 && subLeadingPhoton.hadronicOverEm < 0.08)"
         " && (leadingPhoton.pt >35.0 && subLeadingPhoton.pt > 25.0)"
-        " && (abs(leadingPhoton.superCluster.eta) < 2.5 && abs(subLeadingPhoton.superCluster.eta) < 2.5)"
+#        " && (abs(leadingPhoton.superCluster.eta) < 2.5 && abs(subLeadingPhoton.superCluster.eta) < 2.5)"
+        " && (abs(leadingPhoton.superCluster.eta) < 2.1 && abs(subLeadingPhoton.superCluster.eta) < 2.1)"  #new FNUF corrections are too big for photons with eta > 2.1
         " && (abs(leadingPhoton.superCluster.eta) < 1.4442 || abs(leadingPhoton.superCluster.eta) > 1.566)"
         " && (abs(subLeadingPhoton.superCluster.eta) < 1.4442 || abs(subLeadingPhoton.superCluster.eta) > 1.566)"
         " && (leadPhotonId > -0.9 && subLeadPhotonId > -0.9)"
