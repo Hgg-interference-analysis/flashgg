@@ -118,7 +118,7 @@
 
     "flashggDiPhotonMVA" : 
     {  
-        "weightFile" : "flashgg/Taggers/data/STXSmodels/altDiphoModel_IncUL2017.xml",
+        "weightFile" : "flashgg/Taggers/data/MassWidth/UL16PostVFP_no_masswindow_withmsweight_withoutsigmarv_with_reweight_negweight_DiphotonXGboost_afterTune_new_withAllSigs.weights.xml",
         "version" : "xgb"
     },
 

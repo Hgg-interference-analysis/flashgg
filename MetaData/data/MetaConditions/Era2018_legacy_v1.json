@@ -103,7 +103,7 @@
 
     "flashggDiPhotonMVA" :
     {
-        "weightFile" : "flashgg/Taggers/data/STXSmodels/legacyDiphoModelMerged.xml",
+        "weightFile" : "flashgg/Taggers/data/MassWidth/UL18_Summer20_NoMassWindow_Withmsweight_WithoutSigmarv_AbsWeight_Reweight.weights.xml",
         "version" : "xgb"
     },
 
