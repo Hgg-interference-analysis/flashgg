@@ -1,12 +1,12 @@
 nEvents=-1
-outdir=untaggedTag_UL18_ggh_sherpa_MC_new
+outdir=untaggedTag_UL16preVFP_sigMC_new
 dumper=$CMSSW_BASE/src/flashgg/Dumpers/workspaceStd.py
 queue=tomorrow
-json=$CMSSW_BASE/src/flashgg/Dumpers/UL18_ggh_sherpa.json
+json=$CMSSW_BASE/src/flashgg/Dumpers/UL16preVFP_sig.json
 
 fggRunJobs.py  \
     --load $json \
-    --stage-to /eos/cms/store/group/phys_higgs/cmshgg/rgargiul/trees/trees_ggh_sherpa \
+    --stage-to /eos/cms/store/group/phys_higgs/cmshgg/rgargiul/trees/trees_sig/ggH_UL16preVFP/ \
     -d $outdir \
     -q $queue \
     -n 1000 \

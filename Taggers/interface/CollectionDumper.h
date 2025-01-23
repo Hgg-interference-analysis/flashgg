@@ -423,34 +423,35 @@ namespace flashgg {
             pca_matrix_.resize(nPdfWeights_, 60);
             pca_offset_.resize(60);
             matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/InterferenceWidth/PcaMatrices/ggh_pcamatrix.dat");
-            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/ggh_offset.dat");
+            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/InterferenceWidth/PcaMatrices/ggh_offset.dat");
         }
 
         if ( (processId_.find(ggh) != std::string::npos) && (fromSHERPA_ ) && (isInt_)) {
             pca_matrix_.resize(nPdfWeights_, 100);
             pca_offset_.resize(100);
-            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/int_pcamatrix.dat");
-            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/int_offset.dat");
+            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/InterferenceWidth/PcaMatrices/int_pcamatrix.dat");
+            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/InterferenceWidth/PcaMatrices/int_offset.dat");
         }
 
         if ( (processId_.find(ggh) != std::string::npos) && (fromSHERPA_ ) && (!isInt_)) {
             pca_matrix_.resize(nPdfWeights_, 100);
             pca_offset_.resize(100);
-            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/ggh_sherpa_pcamatrix.dat");
-            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/ggh_sherpa_offset.dat");
+            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/InterferenceWidth/PcaMatrices/ggh_sherpa_pcamatrix.dat");
+            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/InterferenceWidth/PcaMatrices/ggh_sherpa_offset.dat");
         }
 
         if ( (processId_.find(vbf) != std::string::npos) && (!fromSHERPA_ )) {
             pca_matrix_.resize(nPdfWeights_, 60);
             pca_offset_.resize(60);
-            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/vbf_pcamatrix.dat");
-            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/PcaMatrices/vbf_offset.dat");
+            matrixFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/InterferenceWidth/PcaMatrices/vbf_pcamatrix.dat");
+            offsetFile = std::ifstream("/eos/cms/store/group/phys_higgs/cmshgg/flashgg-data/Taggers/data/InterferenceWidth/PcaMatrices/vbf_offset.dat");
         }
 
 
         for(int row = 0; row < pca_matrix_.rows(); ++row)
             for(int col = 0; col < pca_matrix_.cols(); ++col)
                 matrixFile >> pca_matrix_(row, col);
+
 
         for(int row = 0; row < pca_offset_.rows(); ++row)
                 offsetFile >> pca_offset_(row);

@@ -15,7 +15,6 @@ flashggUntagged = cms.EDProducer("FlashggUntaggedTagProducer",
                                  #Boundaries     = cms.vdouble(0.757813, 0.950069, 0.787030, 0.948306, 0.840837, 0.959120, 0.954860, 0.995218),  #4 categories
                                  #Boundaries     = cms.vdouble(-1.000),  #no categories
                                  Boundaries_pt  = cms.vdouble(15.0, 25.0, 40.0, 64.0, 114.0, 3000.0),  #5 categories
-                                 #Boundaries_pt  = cms.vdouble(15.0, 30.0, 53.0, 114.0, 3000.0), #4 categories
                                  #Boundaries_pt  = cms.vdouble(0),  #no categories
                                  RequireScaledPtCuts = cms.bool(True)
 )
