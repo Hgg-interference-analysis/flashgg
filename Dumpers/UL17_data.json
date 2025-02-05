@@ -1,0 +1,13 @@
+{
+  "cmdLine"  : "campaign=Era2017_legacy_v1_Summer20UL metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2017_legacy_v1.json doSystematics=1 doPdfWeights=0 disableJEC=0 dumpGenWeight=0 dumpTrees=1 dumpWorkspace=0 useAAA=True fromSHERPA=False processType=data processId=data",
+
+  "processes" :
+  { "Data": [
+		"/DoubleEG/phys_higgs-Era2017_legacy_v1_Summer20UL-legacyRunII-v0-Run2017B-UL2017_MiniAODv2-v1-5d1968cd298df07a37bbf2f11ba30be1/USER",
+		"/DoubleEG/phys_higgs-Era2017_legacy_v1_Summer20UL-legacyRunII-v0-Run2017C-UL2017_MiniAODv2-v2-5d1968cd298df07a37bbf2f11ba30be1/USER",
+		"/DoubleEG/phys_higgs-Era2017_legacy_v1_Summer20UL-legacyRunII-v0-Run2017D-UL2017_MiniAODv2-v1-5d1968cd298df07a37bbf2f11ba30be1/USER",
+		"/DoubleEG/phys_higgs-Era2017_legacy_v1_Summer20UL-legacyRunII-v0-Run2017E-UL2017_MiniAODv2-v1-5d1968cd298df07a37bbf2f11ba30be1/USER",
+		"/DoubleEG/phys_higgs-Era2017_legacy_v1_Summer20UL-legacyRunII-v0-Run2017F-UL2017_MiniAODv2-v2-5d1968cd298df07a37bbf2f11ba30be1/USER"
+            ]
+  }
+}

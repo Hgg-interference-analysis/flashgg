@@ -1,14 +1,15 @@
 nEvents=-1
-outdir=untaggedTag_UL17_sigMC_new
+outdir=untaggedTag_UL16postVFP_data_new
 dumper=$CMSSW_BASE/src/flashgg/Dumpers/workspaceStd.py
 queue=tomorrow
-json=$CMSSW_BASE/src/flashgg/Dumpers/UL17_sig.json
+json=$CMSSW_BASE/src/flashgg/Dumpers/UL16postVFP_data.json
 
 fggRunJobs.py  \
     --load $json \
-    --stage-to /eos/cms/store/group/phys_higgs/cmshgg/HGG_Int/Mattia/ggH_UL17/ \
+    --stage-to /eos/cms/store/group/phys_higgs/cmshgg/HGG_Int/Mattia/data_UL16postVFP/ \
     -d $outdir \
     -q $queue \
+    -H \
     -n 1000 \
     --no-copy-proxy -D -P \
     --no-use-tarball \

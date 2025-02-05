@@ -6,7 +6,7 @@ json=$CMSSW_BASE/src/flashgg/Dumpers/UL16postVFP_sig.json
 
 fggRunJobs.py  \
     --load $json \
-    --stage-to /eos/cms/store/group/phys_higgs/cmshgg/rgargiul/trees/trees_sig/ggH_UL16postVFP/ \
+    --stage-to /eos/cms/store/group/phys_higgs/cmshgg/HGG_Int/Mattia/ggH_UL16postVFP/ \
     -d $outdir \
     -q $queue \
     -n 1000 \
