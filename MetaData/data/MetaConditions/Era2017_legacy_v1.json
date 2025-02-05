@@ -151,6 +151,11 @@
         "jetID" : "Tight2017"
     },
 
+    "untaggedTag" :
+    {
+      "Boundaries" : [0.9297,0.9761,0.9258,0.9782,0.8814,0.9776,0.9286,0.9829,0.9588,0.9956]
+    },
+
     "stageOneCombinedTag" : 
     {  
         "rawDiphoBounds" : [

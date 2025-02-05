@@ -52,19 +52,19 @@ namespace flashgg {
         for (int i=0; i<( int )boundaries_temp.size()/2; i++){
             boundaries.push_back( {boundaries_temp[2*i], boundaries_temp[2*i + 1]} );
         }
-        /*cout<<"MVA boundaries are: " <<endl;
+        cout<<"MVA boundaries are: " <<endl;
         for(int i=0;i<( int )boundaries.size();i++){
             for(int j=0;j<( int )boundaries[i].size();j++)
                 cout<<boundaries[i][j]<<" ";
             cout<<endl;
-         }*/
+         }
         //boundaries = iConfig.getParameter<vector<double > >( "Boundaries" );
         boundaries_pt = iConfig.getParameter<vector<double > >( "Boundaries_pt" );
-        /*cout<<"pT boundaries are: " <<endl;
+        cout<<"pT boundaries are: " <<endl;
         for(int i=0;i<( int )boundaries_pt.size();i++){
             cout<<boundaries_pt[i]<<" ";
         }
-        cout<<endl;*/
+        cout<<endl;
         
 
         //assert( is_sorted( boundaries.begin(), boundaries.end() ) ); // we are counting on ascending order - update this to give an error message or exception
@@ -91,8 +91,8 @@ namespace flashgg {
         // choose mva categories within different diphoton pT categories for Hgg interference analysis.
         int n, m;
         for( n = 0 ; n < ( int )boundaries_pt.size()-1 ; n++ ) {
+
             if( ( double )pT >= ( double )boundaries_pt[boundaries_pt.size() - n - 2] && ( double )pT < ( double )boundaries_pt[boundaries_pt.size() - n - 1]) { 
-                //std::cout<<"pT = " << pT << std::endl;
                 for( m = 0 ; m < ( int )boundaries[boundaries_pt.size() - n - 2].size() ; m++ ) { 
                     if( ( double )mvavalue > boundaries[boundaries_pt.size() - n - 2][boundaries[boundaries_pt.size() - n - 2].size() - m -1] ) { 
                         //std::cout<<"boundaries["<<boundaries_pt.size() - n - 2<<"]["<<boundaries[boundaries_pt.size() - n - 2].size() - m -1<<"] = " << boundaries[boundaries_pt.size() - n - 2][boundaries[boundaries_pt.size() - n - 2].size() - m -1] <<std::endl;
