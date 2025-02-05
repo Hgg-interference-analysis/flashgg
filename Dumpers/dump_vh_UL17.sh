@@ -1,8 +1,8 @@
 nEvents=-1
-outdir=untaggedTag_UL17_sigMC_new
+outdir=untaggedTag_UL17_vhMC_new
 dumper=$CMSSW_BASE/src/flashgg/Dumpers/workspaceStd.py
 queue=tomorrow
-json=$CMSSW_BASE/src/flashgg/Dumpers/UL17_sig.json
+json=$CMSSW_BASE/src/flashgg/Dumpers/UL17_vh.json
 
 fggRunJobs.py  \
     --load $json \
