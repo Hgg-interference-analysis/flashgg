@@ -26,6 +26,13 @@ AutoDict_*
 *.png
 *.pdf
 
+# dumper configs
+Dumpers/dump_data_UL18.sh
+Dumpers/dump_int_UL18.sh
+Dumpers/dump_locally_VBF.sh
+Dumpers/dump_resubmit_int_UL18.sh
+Dumpers/dump_signal_UL18.sh
+
 # This is a symlink created by setup.sh
 DataFormats/src/classes_def.xml
 

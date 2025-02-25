@@ -1,16 +1,16 @@
 nEvents=-1
-outdir=untaggedTag_UL18_intMC_new
+outdir=UL18_intMC_newFNUF_VBFTag0
 dumper=$CMSSW_BASE/src/flashgg/Dumpers/workspaceStd.py
 queue=tomorrow
-json=$CMSSW_BASE/src/flashgg/Dumpers/UL18_int.json
+json=$CMSSW_BASE/src/flashgg/Dumpers/UL18_int_m125.json
 
 fggRunJobs.py  \
     --load $json \
-    --stage-to /eos/user/r/rgargiul/amrutha_ws/signal_trees/untaggedTag_UL18_intMC_vbfcat \
+    --stage-to /eos/user/a/amkrishn/hggWidth/mcNtuples/condor_output/2018/UL18_intMC_newFNUF_VBFTag0 \
     -d $outdir \
     -q $queue \
-    -n 1000 \
+    -n 200 \
     --no-copy-proxy -D -P \
     --no-use-tarball \
-    -x cmsRun $dumper maxEvents=$nEvents copyInputMicroAOD=False \
+    -x cmsRun $dumper maxEvents=$nEvents copyInputMicroAOD=True \
     --cont --resubmit-missing

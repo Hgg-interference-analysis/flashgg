@@ -1,5 +1,5 @@
 {
-  "cmdLine"  : "campaign=Era2018_legacy_v1_Summer20UL metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2018_legacy_v1.json doSystematics=1 doPdfWeights=0 disableJEC=0 dumpGenWeight=True dumpTrees=1 dumpWorkspace=0 useAAA=True fromSHERPA=False processType=data processId=data",
+  "cmdLine"  : "campaign=Era2018_legacy_v1_Summer20UL metaConditions=$CMSSW_BASE/src/flashgg/MetaData/data/MetaConditions/Era2018_legacy_v1.json doSystematics=1 doPdfWeights=0 disableJEC=0 dumpGenWeight=False dumpTrees=1 dumpWorkspace=0 useAAA=True fromSHERPA=False processType=data processId=data",
 
   "processes" :
   { "Data": [
